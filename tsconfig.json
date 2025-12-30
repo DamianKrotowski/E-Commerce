@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "target": "ESNext",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "strictNullChecks": false,
+    "esModuleInterop": true,
+    "baseUrl": "./",
+    "paths": {
+      "@_pages/*": ["src/pages/*"],
+      "@_testdata/*": ["src/testdata/*"],
+      "@_tests/*": ["src/tests/*"]
+    }
+  }
+}
