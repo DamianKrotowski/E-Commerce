@@ -10,7 +10,9 @@
     "paths": {
       "@_pages/*": ["src/pages/*"],
       "@_testdata/*": ["src/testdata/*"],
-      "@_tests/*": ["src/tests/*"]
+      "@_tests/*": ["src/tests/*"],
+      "@_fixtures/*": ["src/fixtures/*"],
+      "@_helpers/*": ["src/helpers/*"]
     }
   }
 }
