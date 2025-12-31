@@ -9,18 +9,15 @@ export class LoginPage {
 
   constructor(page: Page) {
     this.page = page;
-
-    const loginForm = page.locator('form').filter({
-      has: page.getByRole('button', { name: 'Log in' }),
-    });
-
-    this.loginEmailInput = loginForm.locator('#Email');
-    this.loginPasswordInput = loginForm.locator('#Password');
-    this.loginButton = loginForm.getByRole('button', { name: 'Log in' });
-  }
-
-  async goto() {
-    await this.page.goto('/login?returnUrl=%2F');
+    this.loginEmailInput = page.locator(
+      'div[class="form-fields"] input[type="email"]',
+    );
+    this.loginPasswordInput = page.locator(
+      'div[class="form-fields"] input[type="password"]',
+    );
+    this.loginButton = page.locator(
+      'div[class="buttons"] button[type="submit"]',
+    );
   }
 
   async login(email: string, password: string) {

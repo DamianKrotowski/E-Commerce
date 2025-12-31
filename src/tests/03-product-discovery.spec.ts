@@ -25,72 +25,76 @@ test.describe('Product Discovery', () => {
     }
   });
 
-  test.beforeEach(
-    async ({ page, categoryNavPageComponent, productFiltersComponent }) => {
-      await page.goto('/');
-      await categoryNavPageComponent.chooseCategory('computers');
-      await categoryNavPageComponent.chooseCategory('notebooks');
-      await productFiltersComponent.chooseFilter('Intel Core i5');
-      await productFiltersComponent.chooseFilter('8 GB');
-    },
-  );
-});
+  test.describe('Path B: Browse category (with filters)', () => {
+    test.beforeEach(
+      async ({ page, categoryNavPageComponent, productFiltersComponent }) => {
+        await page.goto('/');
+        await categoryNavPageComponent.chooseCategory('computers');
+        await categoryNavPageComponent.chooseCategory('notebooks');
+        await productFiltersComponent.chooseFilter('Intel Core i5');
+        await productFiltersComponent.chooseFilter('8 GB');
+      },
+    );
 
-test('Path B: Browse category -> open product details page (not via search)', async ({
-  searchResultsPage,
-  productPage,
-}) => {
-  const firstproductNameText = await searchResultsPage.productTitleLinks
-    .first()
-    .innerText();
+    test('Open product details page (not via search)', async ({
+      searchResultsPage,
+      productPage,
+    }) => {
+      const firstproductNameText = await searchResultsPage.productTitleLinks
+        .first()
+        .innerText();
 
-  const resultCount = await searchResultsPage.productItems.count();
+      const resultCount = await searchResultsPage.productItems.count();
 
-  if (resultCount > 0) {
-    await searchResultsPage.productTitleLinks.first().click();
+      if (resultCount > 0) {
+        await searchResultsPage.productTitleLinks.first().click();
 
-    await expect(productPage.title).toContainText(firstproductNameText);
-  } else {
-    await expect(searchResultsPage.emptyResultsText).toBeVisible();
-  }
-});
+        await expect(productPage.title).toContainText(firstproductNameText);
+      } else {
+        await expect(searchResultsPage.emptyResultsText).toBeVisible();
+      }
+    });
 
-test('Browse category -> open product and add to cart', async ({
-  searchResultsPage,
-  productPage,
-  headerComponent,
-  cartPage,
-}) => {
-  const firstproductNameText = await searchResultsPage.productTitleLinks
-    .first()
-    .innerText();
-  const firstproductPriceText = await searchResultsPage.productPriceTextValue
-    .first()
-    .innerText();
+    test('Open product and add to cart, change value and add invalid coupon', async ({
+      searchResultsPage,
+      productPage,
+      headerComponent,
+      cartPage,
+    }) => {
+      const firstproductNameText = await searchResultsPage.productTitleLinks
+        .first()
+        .innerText();
+      const firstproductPriceText =
+        await searchResultsPage.productPriceTextValue.first().innerText();
 
-  const resultCount = await searchResultsPage.productItems.count();
+      const resultCount = await searchResultsPage.productItems.count();
 
-  if (resultCount > 0) {
-    await searchResultsPage.productTitleLinks.first().click();
+      if (resultCount > 0) {
+        await searchResultsPage.productTitleLinks.first().click();
 
-    await expect(productPage.title).toContainText(firstproductNameText);
-  } else {
-    await expect(searchResultsPage.emptyResultsText).toBeVisible();
-  }
-  // 6. Cart Mutations
-  await productPage.addToCart();
-  await headerComponent.cartLink.click();
+        await expect(productPage.title).toContainText(firstproductNameText);
+      } else {
+        await expect(searchResultsPage.emptyResultsText).toBeVisible();
+      }
 
-  await expect(cartPage.productNameText).toHaveText(firstproductNameText);
-  await expect(cartPage.productPriceText).toHaveText(firstproductPriceText);
+      // 6. Cart Mutations
+      await productPage.addToCartButton.click();
+      await headerComponent.cartLink.click();
 
-  await cartPage.quantityUpButton.click();
+      await expect(cartPage.productNameText).toHaveText(firstproductNameText);
+      await expect(cartPage.productPriceText).toHaveText(firstproductPriceText);
 
-  await expect(cartPage.quantityInput).toHaveValue('2');
-  await expect(cartPage.productPriceText).not.toHaveText(firstproductPriceText);
+      await cartPage.quantityUpButton.click();
 
-  // 7. Coupon / Discount
-  await cartPage.applyCoupon('DISCOUNT10');
+      await expect(cartPage.quantityInput).toHaveValue('2');
+      await expect(cartPage.productPriceText).not.toHaveText(
+        firstproductPriceText,
+      );
 
-  await expect(cartPage.couponErrorText).toBeVisible();
+      // 7. Coupon / Discount
+      await cartPage.applyCoupon('DISCOUNT10');
+
+      await expect(cartPage.couponErrorText).toBeVisible();
+    });
+  });
 });

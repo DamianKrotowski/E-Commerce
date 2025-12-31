@@ -5,9 +5,6 @@ export class SearchResultsPage {
   readonly productItems: Locator;
   readonly productTitleLinks: Locator;
   readonly emptyResultsText: Locator;
-  readonly priceMinInput: Locator;
-  readonly priceMaxInput: Locator;
-  readonly priceFilterButton: Locator;
   readonly productPriceTextValue: Locator;
 
   constructor(page: Page) {
@@ -24,19 +21,5 @@ export class SearchResultsPage {
     this.emptyResultsText = page
       .locator('div[class="no-result"]')
       .getByText('No products were found that matched your criteria');
-    this.priceMinInput = page.locator('input[name="pricefrom"]');
-    this.priceMaxInput = page.locator('input[name="priceto"]');
-    this.priceFilterButton = page.getByRole('button', { name: /filter/i });
-  }
-
-  async applyPriceRange(min: number, max: number) {
-    await this.priceMinInput.fill(String(min));
-    await this.priceMaxInput.fill(String(max));
-
-    if (await this.priceFilterButton.count()) {
-      await this.priceFilterButton.click();
-    } else {
-      await this.page.keyboard.press('Enter');
-    }
   }
 }

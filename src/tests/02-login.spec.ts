@@ -11,9 +11,6 @@ test.describe('User Login', () => {
     await loginPage.loginButton.click();
   });
 
-  test('Should log in successfully', async ({ headerComponent }) => {
-    expect(headerComponent.logoutLink).toBeVisible();
-  });
   test('Should check if user is logged in after site refresh', async ({
     headerComponent,
     page,
