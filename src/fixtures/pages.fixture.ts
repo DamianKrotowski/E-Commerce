@@ -3,11 +3,11 @@ import { RegisterResultPage } from '@_pages/registerResult.page';
 import { RegisterPage } from '@_pages/register.page';
 import { LoginPage } from '@_pages/login.page';
 import { CartPage } from '@_pages/cart.page';
-import { HeaderPage } from '@_pages/header.page';
+import { HeaderPage } from '@_components/header.component';
 import { ProductPage } from '@_pages/product.page';
 import { SearchResultsPage } from '@_pages/searchResults.page';
-import { CategoryNavPage } from '@_pages/categoryNav.page';
-import { ProductFiltersPage } from '@_pages/productFilters.page';
+import { CategoryNavPage } from '@_components/categoryNav.component';
+import { ProductFiltersPage } from '@_components/productFilters.component';
 
 type Fixtures = {
   registerResultPage: RegisterResultPage;
