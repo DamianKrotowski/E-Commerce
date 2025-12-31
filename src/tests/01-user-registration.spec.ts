@@ -3,7 +3,7 @@ import { prepareRandomUser } from '@_testdata/testData';
 
 test.describe('User Registration', () => {
   test('Should register a user successfully and log in', async ({
-    headerPage,
+    headerComponent,
     registerPage,
     registerResultPage,
     page,
@@ -11,7 +11,7 @@ test.describe('User Registration', () => {
     const userData = prepareRandomUser();
 
     await page.goto('/');
-    await headerPage.registerLink.click();
+    await headerComponent.registerLink.click();
     await registerPage.fillForm(userData);
     await registerPage.registerButton.click();
 
@@ -20,12 +20,12 @@ test.describe('User Registration', () => {
     );
   });
   test('Should cover at least one validation case', async ({
-    headerPage,
+    headerComponent,
     registerPage,
     page,
   }) => {
     await page.goto('/');
-    await headerPage.registerLink.click();
+    await headerComponent.registerLink.click();
     await registerPage.registerButton.click();
 
     expect(registerPage.firstNameRequiredError).toBeVisible();

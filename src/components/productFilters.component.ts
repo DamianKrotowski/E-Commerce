@@ -1,6 +1,6 @@
 import { type Page } from '@playwright/test';
 
-export class ProductFiltersPage {
+export class ProductFiltersComponent {
   readonly page: Page;
 
   constructor(page: Page) {

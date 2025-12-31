@@ -6,11 +6,11 @@ test.describe('Product Discovery', () => {
   // (e.g., price range or any range-based filter present in the UI)."
   test('Path A: Search "Laptop" and verify results or 0 results', async ({
     page,
-    headerPage,
+    headerComponent,
     searchResultsPage,
   }) => {
     await page.goto('/');
-    await headerPage.search('laptop');
+    await headerComponent.search('laptop');
 
     const resultCount = await searchResultsPage.productItems.count();
     const allResultTitles =
@@ -25,13 +25,15 @@ test.describe('Product Discovery', () => {
     }
   });
 
-  test.beforeEach(async ({ page, categoryNavPage, productFiltersPage }) => {
-    await page.goto('/');
-    await categoryNavPage.chooseCategory('computers');
-    await categoryNavPage.chooseCategory('notebooks');
-    await productFiltersPage.chooseFilter('Intel Core i5');
-    await productFiltersPage.chooseFilter('8 GB');
-  });
+  test.beforeEach(
+    async ({ page, categoryNavPageComponent, productFiltersComponent }) => {
+      await page.goto('/');
+      await categoryNavPageComponent.chooseCategory('computers');
+      await categoryNavPageComponent.chooseCategory('notebooks');
+      await productFiltersComponent.chooseFilter('Intel Core i5');
+      await productFiltersComponent.chooseFilter('8 GB');
+    },
+  );
 });
 
 test('Path B: Browse category -> open product details page (not via search)', async ({
@@ -56,7 +58,7 @@ test('Path B: Browse category -> open product details page (not via search)', as
 test('Browse category -> open product and add to cart', async ({
   searchResultsPage,
   productPage,
-  headerPage,
+  headerComponent,
   cartPage,
 }) => {
   const firstproductNameText = await searchResultsPage.productTitleLinks
@@ -77,7 +79,7 @@ test('Browse category -> open product and add to cart', async ({
   }
   // 6. Cart Mutations
   await productPage.addToCart();
-  await headerPage.cartLink.click();
+  await headerComponent.cartLink.click();
 
   await expect(cartPage.productNameText).toHaveText(firstproductNameText);
   await expect(cartPage.productPriceText).toHaveText(firstproductPriceText);

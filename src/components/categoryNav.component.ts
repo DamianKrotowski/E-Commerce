@@ -1,6 +1,6 @@
 import { type Page } from '@playwright/test';
 
-export class CategoryNavPage {
+export class CategoryNavComponent {
   readonly page: Page;
 
   constructor(page: Page) {

@@ -3,22 +3,22 @@ import { RegisterResultPage } from '@_pages/registerResult.page';
 import { RegisterPage } from '@_pages/register.page';
 import { LoginPage } from '@_pages/login.page';
 import { CartPage } from '@_pages/cart.page';
-import { HeaderPage } from '@_components/header.component';
+import { HeaderComponent } from '@_components/header.component';
 import { ProductPage } from '@_pages/product.page';
 import { SearchResultsPage } from '@_pages/searchResults.page';
-import { CategoryNavPage } from '@_components/categoryNav.component';
-import { ProductFiltersPage } from '@_components/productFilters.component';
+import { CategoryNavComponent } from '@_components/categoryNav.component';
+import { ProductFiltersComponent } from '@_components/productFilters.component';
 
 type Fixtures = {
   registerResultPage: RegisterResultPage;
   registerPage: RegisterPage;
   loginPage: LoginPage;
-  headerPage: HeaderPage;
+  headerComponent: HeaderComponent;
   productPage: ProductPage;
   cartPage: CartPage;
   searchResultsPage: SearchResultsPage;
-  categoryNavPage: CategoryNavPage;
-  productFiltersPage: ProductFiltersPage;
+  categoryNavPageComponent: CategoryNavComponent;
+  productFiltersComponent: ProductFiltersComponent;
 };
 
 export const test = base.extend<Fixtures>({
@@ -31,8 +31,8 @@ export const test = base.extend<Fixtures>({
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));
   },
-  headerPage: async ({ page }, use) => {
-    await use(new HeaderPage(page));
+  headerComponent: async ({ page }, use) => {
+    await use(new HeaderComponent(page));
   },
   productPage: async ({ page }, use) => {
     await use(new ProductPage(page));
@@ -43,11 +43,11 @@ export const test = base.extend<Fixtures>({
   searchResultsPage: async ({ page }, use) => {
     await use(new SearchResultsPage(page));
   },
-  categoryNavPage: async ({ page }, use) => {
-    await use(new CategoryNavPage(page));
+  categoryNavPageComponent: async ({ page }, use) => {
+    await use(new CategoryNavComponent(page));
   },
-  productFiltersPage: async ({ page }, use) => {
-    await use(new ProductFiltersPage(page));
+  productFiltersComponent: async ({ page }, use) => {
+    await use(new ProductFiltersComponent(page));
   },
 });
 

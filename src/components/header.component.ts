@@ -1,6 +1,6 @@
 import { type Locator, type Page } from '@playwright/test';
 
-export class HeaderPage {
+export class HeaderComponent {
   readonly page: Page;
   readonly registerLink: Locator;
   readonly loginLink: Locator;
