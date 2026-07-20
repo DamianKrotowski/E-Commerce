@@ -1,0 +1,100 @@
+import { test, expect } from '@_fixtures/pages.fixture';
+
+test.describe('Product Discovery', () => {
+  // this is case without filters, regarding ->
+  // "Apply available filters to narrow results to a specific range
+  // (e.g., price range or any range-based filter present in the UI)."
+  test('Path A: Search "Laptop" and verify results or 0 results', async ({
+    page,
+    headerComponent,
+    searchResultsPage,
+  }) => {
+    await page.goto('/');
+    await headerComponent.search('laptop');
+
+    const resultCount = await searchResultsPage.productItems.count();
+    const allResultTitles =
+      await searchResultsPage.productTitleLinks.allTextContents();
+    if (resultCount > 0) {
+      await expect(searchResultsPage.productItems.first()).toBeVisible();
+      for (const title of allResultTitles) {
+        expect(title.toLowerCase()).toContain('laptop');
+      }
+    } else {
+      await expect(searchResultsPage.emptyResultsText).toBeVisible();
+    }
+  });
+
+  test.describe('Path B: Browse category (with filters)', () => {
+    test.beforeEach(
+      async ({ page, categoryNavPageComponent, productFiltersComponent }) => {
+        await page.goto('/');
+        await categoryNavPageComponent.chooseCategory('computers');
+        await categoryNavPageComponent.chooseCategory('notebooks');
+        await productFiltersComponent.chooseFilter('Intel Core i5');
+        await productFiltersComponent.chooseFilter('8 GB');
+      },
+    );
+
+    test('Open product details page (not via search)', async ({
+      searchResultsPage,
+      productPage,
+    }) => {
+      const firstproductNameText = await searchResultsPage.productTitleLinks
+        .first()
+        .innerText();
+
+      const resultCount = await searchResultsPage.productItems.count();
+
+      if (resultCount > 0) {
+        await searchResultsPage.productTitleLinks.first().click();
+
+        await expect(productPage.title).toContainText(firstproductNameText);
+      } else {
+        await expect(searchResultsPage.emptyResultsText).toBeVisible();
+      }
+    });
+
+    test('Open product and add to cart, change value and add invalid coupon', async ({
+      searchResultsPage,
+      productPage,
+      headerComponent,
+      cartPage,
+    }) => {
+      const firstproductNameText = await searchResultsPage.productTitleLinks
+        .first()
+        .innerText();
+      const firstproductPriceText =
+        await searchResultsPage.productPriceTextValue.first().innerText();
+
+      const resultCount = await searchResultsPage.productItems.count();
+
+      if (resultCount > 0) {
+        await searchResultsPage.productTitleLinks.first().click();
+
+        await expect(productPage.title).toContainText(firstproductNameText);
+      } else {
+        await expect(searchResultsPage.emptyResultsText).toBeVisible();
+      }
+
+      // 6. Cart Mutations
+      await productPage.addToCartButton.click();
+      await headerComponent.cartLink.click();
+
+      await expect(cartPage.productNameText).toHaveText(firstproductNameText);
+      await expect(cartPage.productPriceText).toHaveText(firstproductPriceText);
+
+      await cartPage.quantityUpButton.click();
+
+      await expect(cartPage.quantityInput).toHaveValue('2');
+      await expect(cartPage.productPriceText).not.toHaveText(
+        firstproductPriceText,
+      );
+
+      // 7. Coupon / Discount
+      await cartPage.applyCoupon('DISCOUNT10');
+
+      await expect(cartPage.couponErrorText).toBeVisible();
+    });
+  });
+});
